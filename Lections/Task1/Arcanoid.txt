@@ -1,0 +1,37 @@
+@startuml
+
+class Player
+{
+    Name : char[]
+    Score : int
+    LifeCount : int
+}
+
+class Ball
+{
+    PosX : double
+    PosY : double
+    Speed : double
+    Direction : double
+}
+
+class Platform
+{
+    PosX : double
+    Length : double
+    Speed : double
+}
+
+class Brick
+{
+    PosX : double
+    PosY : double
+    SizeX : double
+    SizeY : double
+}
+
+Platform <- Player
+Ball <-> Platform
+Brick <-> Ball
+
+@enduml
