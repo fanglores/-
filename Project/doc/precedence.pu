@@ -1,0 +1,23 @@
+@startuml
+
+control "  main machine" as pc
+entity "generator" as generator
+actor "user" as user
+database "  cloud\nstorage" as cloudStorage
+
+
+(retrieve a photo) <- pc
+(determine the time of day) <-- pc
+(determine the weather) <-- pc
+(determine the position of the sun and clouds) <-- pc
+pc -> (calculate the speed and direction of clouds)
+pc --> (calculate the time until the sun is not visible)
+pc --> (upload data to the cloud storage)
+
+(upload data to the cloud storage) --> cloudStorage
+cloudStorage <-> user :data exchange
+
+pc --> (turn the generator on/off)
+generator <- (turn the generator on/off)
+
+@enduml
