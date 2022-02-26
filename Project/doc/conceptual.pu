@@ -1,4 +1,6 @@
 @startuml
+class Sky
+
 class Camera
 {
    cv::Mat CurrentPhoto;
@@ -20,9 +22,10 @@ class CloudStorage
   map<time_t, cv::Mat> data;
 }
 
+Sky - Camera : takes a shot <
 Camera - MainMachine : have 1 <
 MainMachine - Generator : switches >
 MainMachine -- CloudStorage : exchanges data >
-CloudStorage - User: uses <
+CloudStorage - User: gets access <
 
 @enduml
