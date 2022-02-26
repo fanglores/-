@@ -1,0 +1,28 @@
+@startuml
+class Camera
+{
+   cv::Mat CurrentPhoto;
+}
+
+class MainMachine
+{
+   cv::Mat PreviousPhoto;
+   cv::Mat CurrentPhoto;
+}
+
+class Generator
+{
+   bool state;
+}
+
+class CloudStorage
+{
+  map<time_t, cv::Mat> data;
+}
+
+Camera - MainMachine : have 1 <
+MainMachine - Generator : switches >
+MainMachine -- CloudStorage : exchanges data >
+CloudStorage - User: uses <
+
+@enduml
