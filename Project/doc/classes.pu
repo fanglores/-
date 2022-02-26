@@ -1,0 +1,47 @@
+@startuml
+class Camera
+{
+   cv::Mat CurrentPhoto;
+   
+   cv::Mat getPhoto();
+}
+
+class MainMachine
+{
+   cv::Mat PreviousPhoto;
+   cv::Mat CurrentPhoto;
+   
+   void updatePhoto();
+   bool getDayTime();
+   bool getWeather();
+   void getPositions();
+   void calculateSpeed();
+   void calculateTime();
+   void uploadData();
+   void downloadData();
+   void switchGenerator();
+
+   void start();
+}
+
+class Generator
+{
+   bool state;
+
+   void switch();
+}
+
+class CloudStorage
+{
+  map<time_t, cv::Mat> data;
+
+  cv::Mat downloadData(time_t);
+  void uploadData();
+}
+
+Camera -o MainMachine : have 1 <
+MainMachine - Generator : switches >
+MainMachine -- CloudStorage : exchanges data >
+CloudStorage - User: uses <
+
+@enduml
