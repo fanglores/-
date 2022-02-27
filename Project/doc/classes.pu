@@ -1,31 +1,35 @@
 @startuml
 
-class Sun
-{
-   
-
-}
-
 class Camera
 {
+   cv::VideoCapture cameraUnit;
+
+   Camera();
    cv::Mat getPhoto();
 }
 
 class Photo
 {
-   bool Weather
+   cv::Mat frame;
+   float brightness;
+   bool weather;
+   int[2] sunPos, cloudPos;
 
+   Photo();
+   void setBrightness();
+   void setWeather();
+   void setSunPosition();
+   void setCouldPosition();
 }
 
 class MainMachine
 {
-   cv::Mat PreviousPhoto;
-   cv::Mat CurrentPhoto;
+   Camera camera;
+   Photo previousPhoto;
+   Photo currentPhoto;
    
-   void updatePhoto();
-   bool getDayTime();
-   bool getWeather();
-   void getPositions();
+   MainMachine();
+   void updatePhoto(camera);
    void calculateSpeed();
    void calculateTime();
    void uploadData();
@@ -50,6 +54,8 @@ class CloudStorage
 }
 
 Camera -o MainMachine : has 1 <
+Photo --o MainMachine : has 2 <
+Camera - Photo
 MainMachine - Generator : switches >
 MainMachine -- CloudStorage : uploads data >
 CloudStorage - User: uses <
