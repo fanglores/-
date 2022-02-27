@@ -1,31 +1,42 @@
 @startuml
+
+class Sun
+{
+   Position
+}
+
+class Cloud
+{
+   Position
+}
+
 class Sky
+{
+   Weather
+}
 
+class Photo
 class Camera
-{
-   cv::Mat CurrentPhoto;
-}
-
 class MainMachine
-{
-   cv::Mat PreviousPhoto;
-   cv::Mat CurrentPhoto;
-}
 
 class Generator
 {
-   bool state;
+   State
 }
 
 class CloudStorage
 {
-  map<time_t, cv::Mat> data;
+   AvailableSpace
 }
 
-Sky - Camera : takes a shot <
+Sky -- Photo : contains <
+Photo -- Camera : makes <
+Photo -- MainMachine: gets 2 <
+Sun -- Sky : has 1 <
+Sky - Cloud: owns several >
 Camera - MainMachine : have 1 <
 MainMachine - Generator : switches >
-MainMachine -- CloudStorage : exchanges data >
-CloudStorage - User: gets access <
+MainMachine -- CloudStorage : uploads data >
+CloudStorage - User: gets data <
 
 @enduml
