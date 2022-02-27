@@ -10,14 +10,17 @@ class Cloud
    Position
 }
 
-class Sky
-{
-   Weather
-}
-
 class Photo
+{
+   PixelMatrix
+   Brightness
+}
 class Camera
 class MainMachine
+{
+   Time
+   CurrentWeather
+}
 
 class Generator
 {
@@ -29,12 +32,11 @@ class CloudStorage
    AvailableSpace
 }
 
-Sky -- Photo : contains <
 Photo -- Camera : makes <
 Photo -- MainMachine: gets 2 <
-Sun -- Sky : has 1 <
-Sky - Cloud: owns several >
-Camera - MainMachine : have 1 <
+Sun -- Photo : has 1 <
+Photo - Cloud: has several >
+Camera - MainMachine : has 1 <
 MainMachine - Generator : switches >
 MainMachine -- CloudStorage : uploads data >
 CloudStorage - User: gets data <
