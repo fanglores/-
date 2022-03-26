@@ -2,7 +2,8 @@
 (*) --> [Start()] "STARTING"
 "STARTING" --> [t = 10 secs] "AUTOMATIC"
 "STARTING" --> "MANUAL"
-"MANUAL" --> "STOPPING"
-"AUTOMATIC" --> [Stop()] "STOPPING"
+"MANUAL" --> "ON"
+"AUTOMATIC" --> "ON"
+"ON" --> [Stop()] "STOPPING"
 "STOPPING" --> [t = 10 secs] "OFF"
 @enduml
