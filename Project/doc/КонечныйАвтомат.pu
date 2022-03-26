@@ -1,0 +1,8 @@
+@startuml
+(*) --> [Start()] "STARTING"
+"STARTING" --> [t = 10 secs] "AUTOMATIC"
+"STARTING" --> "MANUAL"
+"MANUAL" --> "STOPPING"
+"AUTOMATIC" --> [Stop()] "STOPPING"
+"STOPPING" --> [t = 10 secs] "OFF"
+@enduml
