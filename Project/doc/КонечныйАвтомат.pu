@@ -1,17 +1,7 @@
-//Generator
 @startuml
-(*) --> [Start()] "STARTING"
-"STARTING" --> [t = 10 secs] "AUTOMATIC"
-"STARTING" --> "MANUAL"
-"MANUAL" --> "ON"
-"AUTOMATIC" --> "ON"
-"ON" --> [Stop()] "STOPPING"
-"STOPPING" --> [t = 10 secs] "OFF"
-@enduml
 
-//System
-@startuml
 (*) -->  [Turn on button] "STARTING"
+
 "STARTING" --> [t = 10 secs] "ON"
 "ON" ---> [Turn off button] "STOPPING"
 "ON" --> [If sun will be closed soon] "START_GENERATOR"
@@ -19,4 +9,12 @@
 "ON" -> [If sun opened] "STOP_GENERATOR"
 "STOP_GENERATOR" --> "ON"
 "STOPPING" --> [t = 10 secs] "OFF"
+
+"START_GENERATOR" --> "Generator::STARTING"
+"Generator::STARTING" -> "Generator::RUNNING"
+'"Generator::RUNNING" -> "Generator::STOPPING"
+"STOP_GENERATOR" --> "Generator::STOPPING"
+"Generator::STOPPING" -> "Generator::STOPPED"
+'"Generator::STOPPED" -> "Generator::STARTING"
+
 @enduml
