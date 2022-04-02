@@ -1,118 +1,233 @@
-#include <opencv2/opencv.hpp>
-#include "opencv2/core/utils/logger.hpp"
+//#include <opencv2/opencv.hpp>
+//#include "opencv2/core/utils/logger.hpp"
 #include <iostream>
 
-enum GeneratorMode
+enum class Event
 {
-    AUTOMATIC,
-    MANUAL
+	NONE,
+	PRESSED_START,
+	PRESSED_STOP,
+	EXIT
 };
 
-enum GeneratorState
+enum class SystemState
 {
-    ON,
+	STARTING,
+	WORKING,
+	STARTING_GENERATOR,
+	STOPPING_GENERATOR,
+	STOPPING,
+	OFF,
+	ERROR
+};
+
+enum class GeneratorState
+{
     STARTING,
+	RUNNING,
     STOPPING,
-    OFF
+    STOPPED,
+	ERROR
 };
 
 class Camera
 {
-
+private:
+	//camera VideoCapture(0); //???
+public:
+	Camera()
+	{}
+	//cv::Mat getPhoto() {}
 };
 
 class Generator
 {
 private:
-    GeneratorState state = GeneratorState::OFF;
-    GeneratorMode mode = GeneratorMode::AUTOMATIC;
-
-    int RunManual()
-    {
-        state = GeneratorState::ON;
-
-        //run in manual mode
-
-        return 0;
-    }
-
-    int RunAutomatic()
-    {
-        state = GeneratorState::ON;
-
-        //run in auto mode
-
-        return 0;
-    }
+    GeneratorState state;
 
 public:
-    int Start(GeneratorMode start_mode)
+	Generator() : state(GeneratorState::STOPPED) 
+	{
+		//init code //???
+	}
+
+    int Start()
     {
-        state = GeneratorState::STARTING;
-        mode = start_mode;
+		try
+		{
+			state = GeneratorState::STARTING;
 
-        //some starting operations here
+			//some starting operations here
 
-        if (mode == GeneratorMode::AUTOMATIC) RunAutomatic();
-        else RunManual();
-
-        return 0;
+			state = GeneratorState::RUNNING;
+			return 0;
+		}
+		catch(...)
+		{
+			state = GeneratorState::ERROR;
+			return -1;
+		}
     }
 
     int Stop()
     {
-        state = GeneratorState::STOPPING;
+		try
+		{
+			state = GeneratorState::STOPPING;
 
-        //some stop operations here
+			//some stop operations here
 
-        state = GeneratorState::OFF;
-
-        return 0;
+			state = GeneratorState::STOPPED;
+			return 0;
+		}
+		catch (...)
+		{
+			state = GeneratorState::ERROR;
+			return -1;
+		}
     }
-};
-
-class CloudStorage
-{
-
 };
 
 class MainMachine
 {
 private:
+	SystemState state;
+
     Camera camera;
-    cv::Mat previousPhoto, currentPhoto;
+	Generator generator;
+
+    //cv::Mat previousPhoto, currentPhoto;
+
+	int Init()
+	{
+		try
+		{
+			state = SystemState::STARTING;
+
+			//init camera, generator??
+
+			state = SystemState::WORKING;
+			std::cerr << "[INFO] Machine has successfully started" << std::endl;
+			return 0;
+		}
+		catch (...)
+		{
+			state = SystemState::ERROR;
+			std::cerr << "[ERROR] Machine initialisation error" << std::endl;
+			return -1;
+		}
+	}
+
+
 public:
-    MainMachine()
-    {
-    }
+    MainMachine() : state(SystemState::OFF) {}
+
+	int Run()
+	{
+		try 
+		{
+			switch (state)
+			{
+				case SystemState::OFF:
+					std::cerr << "[INFO] Machine is starting" << std::endl;
+					return Init();
+
+				case SystemState::WORKING:
+					std::cerr << "[WARNING] Machine is already running" << std::endl;
+					return 0;
+
+				default:
+					std::cerr << "[ERROR] Machine is not ready" << std::endl;
+					return -1;
+			}
+		}
+		catch(...)
+		{
+				std::cerr << "[ERROR] Machine cannot run" << std::endl;
+				return -1;
+		}
+	}
+
+	int Stop() 
+	{
+		if(state == SystemState::WORKING)
+		{
+			try
+			{
+				state = SystemState::STOPPING;
+
+				/* code */
+
+				state = SystemState::OFF;
+				return 0;
+			}
+			catch (...)
+			{
+				std::cerr << "[ERROR] Machine cannot stop" << std::endl;
+				return -1;
+			}
+		}
+		else 
+		{
+			std::cerr << "[ERROR] Machine is not ready" << std::endl;
+			return -1;
+		}
+	}
+
     void updatePhoto()
     {
+
     }
 };
+
+Event getEvent()
+{
+	char c;
+	std::cout << "Enter event: ";
+	std::cin >> c;
+
+	if (c == '1') return Event::PRESSED_START;
+	if (c == '0') return Event::PRESSED_STOP;
+	if (c == 'q') return Event::EXIT;
+	
+	return Event::NONE;
+}
 
 
 int main()
 {   
-    cv::utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
-    cv::VideoCapture camera(0);
+    //cv::utils::logging::setLogLevel(cv::utils::logging::LogLevel::LOG_LEVEL_SILENT);
 
-    if (!camera.isOpened()) 
-    {
-        std::cerr << "ERROR: Could not open camera" << std::endl;
-        return 1;
-    }
+	std::cout << "Hello, docker!!!" << std::endl;
 
-    cv::Mat frame;
+	MainMachine pc;
+	Event event = Event::NONE;
 
-    while (true) 
-    {
-        camera >> frame;
+	while (event != Event::EXIT)
+	{
+		event = getEvent();
 
-        cv::imshow("Webcam.ru", frame);
+		switch(event)
+		{
+			case Event::PRESSED_START:
+				std::cerr << "[INFO] Starting the machine" << std::endl;
+				pc.Run();
+				break;
 
-        if (cv::waitKey(1) == int('q'))
-            break;
-    }
+			case Event::PRESSED_STOP:
+				std::cerr << "[INFO] Stopping the machine" << std::endl;
+				pc.Stop();
+				break;
 
+			case Event::EXIT:
+				std::cerr << "[EXIT]" << std::endl;
+				exit(0);
+				break;
+
+			default:
+				std::cerr << "[ERROR] Unknown event!" << std::endl;
+		}
+	}
+	
     return 0;
 }
