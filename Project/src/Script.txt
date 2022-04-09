@@ -1,0 +1,4 @@
+sudo docker image build --file Dockerfile --tag practics .
+sudo docker image build --file OpenCV.Dockerfile --tag opencv .
+
+sudo docker run -it -v /home/user/"Рабочий стол"/Practics/shared:/workspace --rm opencv bash
