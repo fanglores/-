@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.5)
+
+project( SolarAutonomics )
+
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+add_executable( SolAutic SolAutic.cpp )
+target_link_libraries( SolAutic ${OpenCV_LIBS} )
