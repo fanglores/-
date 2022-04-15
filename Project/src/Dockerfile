@@ -10,9 +10,7 @@ RUN apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev \
 libavformat-dev libswscale-dev python-dev python-numpy libtbb2 libtbb-dev \
 libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev unzip
 
-RUN apt-get install -y wget
-RUN apt-get install -y build-essential
-
+RUN apt-get install -y wget mc nano
 
 # Second: get and build OpenCV 3.2
 #
