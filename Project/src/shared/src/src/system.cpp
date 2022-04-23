@@ -1,12 +1,11 @@
 #include "system.h"
 
-
 System::System() : state(SystemState::OFF) {}
 
 //full coverage is ready
 int System::TurnOn()
 {
-	if (state == SystemState::ON)
+	if (state == SystemState::WORKING)
 	{
 		std::cerr << "[WARNING] System is already turned on" << std::endl;
 		return 0;
@@ -34,7 +33,7 @@ int System::TurnOn()
 	}
 	else 
 	{
-		std::cerr << "[ERROR] System is not ready. Code: " << state << std::endl;
+		std::cerr << "[ERROR] System is not ready. Code: " << int(state) << std::endl;
 		return 1;
 	}
 }
@@ -70,7 +69,7 @@ int System::TurnOff()
 	}
 	else 
 	{
-		std::cerr << "[ERROR] System is not ready. Code: " << state << std::endl;
+		std::cerr << "[ERROR] System is not ready. Code: " << int(state) << std::endl;
 		return 1;
 	}
 }

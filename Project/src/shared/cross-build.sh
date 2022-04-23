@@ -1,5 +1,7 @@
+mkdir build
+
 cd build/
 cmake ..
 make
 
-./SolAutic
+./src/SolEx

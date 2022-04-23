@@ -20,18 +20,21 @@ int main()
 		{
 			case (Event::PRESSED_START):
 				std::cerr << "[INFO] Starting the machine" << std::endl;
-				solauticSystem.TurnOn();
+				if(solauticSystem.TurnOn() == 0) std::cerr << "[INFO] System has started successful" << std::endl;
+				else std::cerr << "[INFO] Error while starting the system" << std::endl;
 				break;
 
 			case (Event::PRESSED_STOP):
 				std::cerr << "[INFO] Stopping the machine" << std::endl;
-				solauticSystem.TurnOn();
+				if(solauticSystem.TurnOff() == 0) std::cerr << "[INFO] System has stopped successful" << std::endl;
+				else std::cerr << "[INFO] Error while stopping the system" << std::endl;
 				break;
 
 			case (Event::EXIT):
-				std::cerr << "[EXIT]" << std::endl;
-				std::cerr << "[EXIT] Stopping the machine" << std::endl;
-				solauticSystem.TurnOff();
+				std::cerr << "[EXIT] System is shutting down" << std::endl;
+				std::cerr << "[EXIT] Stopping the system" << std::endl;
+				if(solauticSystem.TurnOff() == 0) std::cerr << "[INFO] System has stopped successful" << std::endl;
+				else std::cerr << "[INFO] Error while stopping the system" << std::endl;
 				std::exit(0);
 				break;
 
