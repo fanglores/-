@@ -4,13 +4,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-Generator::Generator() : state(GeneratorState::STOPPED) 
+Generator::Generator(Client* ce) : commandExchanger(ce)
 {	
-  sock = socket(AF_INET, SOCK_DGRAM, 0);
-
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons(3425);
-  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  state = getState();
 }
 
 Generator::~Generator()
@@ -18,13 +14,11 @@ Generator::~Generator()
 	close(sock);
 }
 
-int Generator::sendCommand(const char* cmd)
-{
-	return sendto(sock, cmd, sizeof(cmd), 0, (struct sockaddr *)&addr, sizeof(addr));
-}
-
 GeneratorState Generator::getState() const
 {
+	char* buf = commandExchanger->Send("get state cmd");
+
+	state = int(buf);
 	return state;
 }
 
@@ -35,7 +29,7 @@ int Generator::Start()
 		state = GeneratorState::STARTING;
 
 		//some starting operations here
-		sendCommand("1");
+		commandExchanger->Send("1");
 
 		state = GeneratorState::RUNNING;
 		return 0;
@@ -54,7 +48,7 @@ int Generator::Stop()
 		state = GeneratorState::STOPPING;
 
 		//some stop operations here
-		sendCommand("0");
+		commandExchanger->Send("0");
 
 		state = GeneratorState::STOPPED;
 		return 0;

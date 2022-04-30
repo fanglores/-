@@ -1,6 +1,6 @@
 #pragma once
 
-#include <netinet/in.h>
+#include "client.h"
 
 enum class GeneratorState
 {
@@ -14,16 +14,14 @@ enum class GeneratorState
 class Generator
 {
 private:
-	int sock;
-  struct sockaddr_in addr;
-    GeneratorState state;
-
-	int sendCommand(const char* cmd);
-
+	Client* commandExchanger;
+	GeneratorState state;
 public:
-	Generator();
+	Generator(Client* ce);
 	~Generator();
-    int Start();
-    int Stop();
-    GeneratorState getState() const;
+
+	int Start();
+	int Stop();
+
+	GeneratorState getState();
 };
